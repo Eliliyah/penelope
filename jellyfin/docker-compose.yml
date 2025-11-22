@@ -1,3 +1,4 @@
+  GNU nano 7.2                                                                                                 docker-compose.yml                                                                                                           
 services:
   jellyfin:
     image: jellyfin/jellyfin
@@ -8,24 +9,9 @@ services:
       - 8096:8096/tcp
       - 7359:7359/udp
     volumes:
-      - ~./path/to/config:/config
-      - ~./path/to/cache:/cache
+      - ~/etc/config:/config
+      - ~/var/cache/jellyfin:/cache
       - type: bind
-        source: /path/to/media
-        target: /media
-      - type: bind
-        source: /path/to/media2
-        target: /media2
-        read_only: true
-      # Optional - extra fonts to be used during transcoding with subtitle burn-in
-      - type: bind
-        source: /path/to/fonts
-        target: /usr/local/share/fonts/custom
-        read_only: true
-    restart: 'unless-stopped'
-    # Optional - alternative address used for autodiscovery
-    environment:
-      - JELLYFIN_PublishedServerUrl=http://example.com
-    # Optional - may be necessary for docker healthcheck to pass if running in host network mode
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
+        source: /home/ellie/Jellyfin
+        target: /home/ellie/Jellyfin
+        read_only: false
