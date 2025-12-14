@@ -1,0 +1,36 @@
+---
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+
+        # PostgreSQL settings
+      - POSTGRES_HOST=nextcloud-db
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=strongpassword   # choose a secure password
+
+    volumes:
+      - ./nextcloud/config:/config
+      - ./data:/data
+      - ./proton:/proton
+    ports:
+      - 8443:443
+    depends_on:
+      - nextcloud-db
+    restart: unless-stopped
+
+  nextcloud-db:
+    image: postgres:16-alpine       # pin a supported version
+    container_name: nextcloud-db
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=strongpassword
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    restart: unless-stopped
